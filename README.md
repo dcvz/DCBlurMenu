@@ -2,6 +2,12 @@ DCBlurMenu
 ==========
 A blurred swipe down menu designed for iOS 7.
 
+<p align="center" >
+  <img src="https://dl.dropboxusercontent.com/u/25869496/dcblurmenu1.png" width="35%" height="%35" alt="DCBlurMenu" title="DCBlurMenu">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://dl.dropboxusercontent.com/u/25869496/dcblurmenu2.png" width="35%" height="%35" alt="DCBlurMenu" title="DCBlurMenu">
+</p>
+
 ####How to use
 Import DCBlurMenu Folder into your project. In your Storyboard set your Navigation Controller to DCBlurMenuNavigationController, or if doing it programatically make sure to use it as your navigation controller class.
 
