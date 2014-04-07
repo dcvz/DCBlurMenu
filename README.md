@@ -13,6 +13,7 @@ DCBlurMenuNavigationController.m
 	// Do any additional setup after loading the view.
     
     /* edit the values here */
+    // menuItem titles must match storyboard identifiers
     menuItems = [[NSArray alloc] initWithObjects:@"First", @"Second", @"Third", @"Fourth", @"Fifth", nil];
     startIndex = 0;
     /* edit the values here */
