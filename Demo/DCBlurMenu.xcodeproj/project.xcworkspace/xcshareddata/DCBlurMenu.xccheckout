@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A6D362E8-4D71-4909-B2BE-B738E95D322B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DCBlurMenu</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2212D901-06B9-425F-A6CD-EE84B47759FC</key>
+		<string>https://github.com/ivoleko/ILTranslucentView.git</string>
+		<key>277DD458-918D-461A-98E3-3253356580C4</key>
+		<string>https://github.com/dchavezlive/DCBlurMenu.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Demo/DCBlurMenu.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2212D901-06B9-425F-A6CD-EE84B47759FC</key>
+		<string>../../../DCBlurMenu/ILTranslucentView</string>
+		<key>277DD458-918D-461A-98E3-3253356580C4</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/dchavezlive/DCBlurMenu.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>277DD458-918D-461A-98E3-3253356580C4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>277DD458-918D-461A-98E3-3253356580C4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DCBlurMenu</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2212D901-06B9-425F-A6CD-EE84B47759FC</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ILTranslucentView</string>
+		</dict>
+	</array>
+</dict>
+</plist>

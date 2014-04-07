@@ -1,0 +1,3 @@
+[submodule "DCBlurMenu/ILTranslucentView"]
+	path = DCBlurMenu/ILTranslucentView
+	url = https://github.com/ivoleko/ILTranslucentView.git
