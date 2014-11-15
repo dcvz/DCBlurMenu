@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A20B862E1A16E18600AE3D7B /* ExampleNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A20B862D1A16E18600AE3D7B /* ExampleNavigationController.m */; };
+		A20B86311A170DC700AE3D7B /* NSObject+AbstractAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A20B86301A170DC700AE3D7B /* NSObject+AbstractAdditions.m */; };
 		A22B850718F10B1000AA68F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = A22B84FE18F10B1000AA68F2 /* .gitignore */; };
 		A22B850818F10B1000AA68F2 /* ILTranslucentView.podspec in Resources */ = {isa = PBXBuildFile; fileRef = A22B84FF18F10B1000AA68F2 /* ILTranslucentView.podspec */; };
 		A22B850918F10B1000AA68F2 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A22B850018F10B1000AA68F2 /* LICENSE */; };
@@ -28,6 +30,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A20B862C1A16E18600AE3D7B /* ExampleNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleNavigationController.h; sourceTree = "<group>"; };
+		A20B862D1A16E18600AE3D7B /* ExampleNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleNavigationController.m; sourceTree = "<group>"; };
+		A20B862F1A170DC700AE3D7B /* NSObject+AbstractAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+AbstractAdditions.h"; path = "../../DCBlurMenu/NSObject+AbstractAdditions.h"; sourceTree = "<group>"; };
+		A20B86301A170DC700AE3D7B /* NSObject+AbstractAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+AbstractAdditions.m"; path = "../../DCBlurMenu/NSObject+AbstractAdditions.m"; sourceTree = "<group>"; };
 		A22B84FE18F10B1000AA68F2 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A22B84FF18F10B1000AA68F2 /* ILTranslucentView.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ILTranslucentView.podspec; sourceTree = "<group>"; };
 		A22B850018F10B1000AA68F2 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -101,6 +107,8 @@
 				A22B851018F10B4C00AA68F2 /* DCBlurMenuNavigationController.m */,
 				A22B851B18F10D0100AA68F2 /* DCBlurMenu.h */,
 				A22B851C18F10D0100AA68F2 /* DCBlurMenu.m */,
+				A20B862F1A170DC700AE3D7B /* NSObject+AbstractAdditions.h */,
+				A20B86301A170DC700AE3D7B /* NSObject+AbstractAdditions.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -140,6 +148,8 @@
 				A2560A9318C435C700ADDF7F /* MainStoryboard.storyboard */,
 				A22B851E18F148B100AA68F2 /* FirstViewController.h */,
 				A22B851F18F148B100AA68F2 /* FirstViewController.m */,
+				A20B862C1A16E18600AE3D7B /* ExampleNavigationController.h */,
+				A20B862D1A16E18600AE3D7B /* ExampleNavigationController.m */,
 				A22B852318F168F800AA68F2 /* Images.xcassets */,
 				A22B850E18F10B4300AA68F2 /* Classes */,
 				A22B84FD18F10B1000AA68F2 /* ILTranslucentView */,
@@ -234,7 +244,9 @@
 				A22B851318F10B4C00AA68F2 /* DCBlurMenuNavigationController.m in Sources */,
 				A2560A7118C42DB000ADDF7F /* AppDelegate.m in Sources */,
 				A22B850C18F10B1000AA68F2 /* ILTranslucentView.m in Sources */,
+				A20B86311A170DC700AE3D7B /* NSObject+AbstractAdditions.m in Sources */,
 				A22B851D18F10D0100AA68F2 /* DCBlurMenu.m in Sources */,
+				A20B862E1A16E18600AE3D7B /* ExampleNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

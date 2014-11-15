@@ -7,17 +7,15 @@
 //
 
 #import "DCBlurMenuNavigationController.h"
+#import "NSObject+AbstractAdditions.h"
+
+@interface DCBlurMenuNavigationController()
+@property (strong, nonatomic) UIViewController *fakeRootViewController;
+@property (strong, nonatomic) DCBlurMenu *blurMenu;
+@property (assign, nonatomic) NSInteger currentIndex;
+@end
 
 @implementation DCBlurMenuNavigationController
-{
-    UIViewController *fakeRootViewController;
-    DCBlurMenu *blurMenu;
-    
-    NSInteger currentSelected;
-    NSArray *menuItems;
-    
-    int startIndex;
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -25,11 +23,11 @@
     UIViewController *fakeController = [[UIViewController alloc] init];
     if (self)
     {
-        fakeRootViewController = fakeController;
+        self.fakeRootViewController = fakeController;
         NSMutableArray *array = [NSMutableArray arrayWithArray:[super viewControllers]];
         [array insertObject:fakeController atIndex:0];
         self.viewControllers = array;
-        currentSelected = 0;
+        self.currentIndex = 0;
         
         [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     }
@@ -47,6 +45,7 @@
         [array removeObjectAtIndex:0];
         return array;
     }
+    
     return viewControllers;
 }
 
@@ -61,8 +60,13 @@
 -(void)setRootViewController:(UIViewController *)rootViewController
 {
     rootViewController.navigationItem.hidesBackButton = YES;
-    [self popToViewController:fakeRootViewController animated:NO];
+    [self popToViewController:self.fakeRootViewController animated:NO];
     [self pushViewController:rootViewController animated:NO];
+}
+
+- (void)createMenu
+{
+    [self doesNotImplementSelector:_cmd];
 }
 
 - (void)viewDidLoad
@@ -70,22 +74,29 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    /* edit the values here */
-    // menuItem titles must match storyboard identifiers
-    menuItems = [[NSArray alloc] initWithObjects:@"First", @"Second", @"Third", @"Fourth", @"Fifth", nil];
-    startIndex = 0;
-    /* edit the values here */
+    [self createMenu];
+    
+    if (!self.startIndex)
+    {
+        NSLog(@"No start index set. Using 0 by default");
+        self.startIndex = 0;
+    }
+    
+    DCMenuItem *startItem = self.menuItems[self.startIndex];
     
     // do this to remove the back attribute
-    UIViewController *firstView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil]instantiateViewControllerWithIdentifier:menuItems[startIndex]];
+    UIViewController *firstView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil]instantiateViewControllerWithIdentifier:startItem.storyboardID];
     [self setRootViewController:firstView];
     
-    blurMenu = [[DCBlurMenu alloc] initWithNavigationController:self];
-    [self.view insertSubview:blurMenu belowSubview:self.navigationBar];
+    self.blurMenu = [[DCBlurMenu alloc] initWithNavigationController:self];
+    [self.view insertSubview:self.blurMenu belowSubview:self.navigationBar];
     
-    [blurMenu setDelegate:self];
-    [blurMenu setCellHeight:50.f];  // set the height of the menu cells
-    [blurMenu loadMenuWithButtons:menuItems];
+    [self.blurMenu setDelegate:self];
+    [self.blurMenu setCellHeight:50.f];
+    [self.blurMenu setCellSelectedColor:self.cellSelectedColor];
+    [self.blurMenu setAnimationDuration:self.animationDuration];
+    [self.blurMenu setCellHeight:self.cellHeight];
+    [self.blurMenu loadMenuWithButtons:self.menuItems];
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,26 +105,31 @@
     // Dispose of any resources that can be recreated.
 }
 
-// will return the indexPath of the selected menu row
--(void)menuItemSelected:(NSIndexPath *)indexPath
+- (void)selectedItemAtIndex:(NSInteger)index
 {
-    if (indexPath.row != currentSelected)
+    [self doesNotImplementSelector:_cmd];
+}
+
+// will return the indexPath of the selected menu row
+-(void)menuItemSelected:(NSInteger)index
+{
+    if (index != self.currentIndex)
     {
+        DCMenuItem *selectedItem = self.menuItems[index];
+        
     	// will change view to view with identifier equal to selected item title
-        UIViewController *selectedView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil]instantiateViewControllerWithIdentifier:menuItems[indexPath.row]];
+        UIViewController *selectedView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil]instantiateViewControllerWithIdentifier:selectedItem.storyboardID];
         [self setRootViewController:selectedView];
     }
     
-    currentSelected = indexPath.row;
-    [blurMenu hideMenu];
+    self.currentIndex = index;
+    [self selectedItemAtIndex:index];
+    [self.blurMenu hideMenu];
 }
 
 -(void)menuIsAnimating
 {
-    if (blurMenu.isShowing)
-        NSLog(@"Menu is open!");
-    else
-        NSLog(@"Menu is closed!");
+    [self doesNotImplementOptionalSelector:_cmd];
 }
 
 @end

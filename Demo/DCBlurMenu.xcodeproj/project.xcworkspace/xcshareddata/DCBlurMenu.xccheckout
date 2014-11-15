@@ -10,33 +10,33 @@
 	<string>DCBlurMenu</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>2212D901-06B9-425F-A6CD-EE84B47759FC</key>
+		<key>EAE3E62F29FFB11C39602F0551980E472F2AA7E8</key>
 		<string>https://github.com/ivoleko/ILTranslucentView.git</string>
-		<key>277DD458-918D-461A-98E3-3253356580C4</key>
+		<key>EDD3A037022D95B20D25045D510BB3F397D00CA0</key>
 		<string>https://github.com/dchavezlive/DCBlurMenu.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Demo/DCBlurMenu.xcodeproj/project.xcworkspace</string>
+	<string>Demo/DCBlurMenu.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>2212D901-06B9-425F-A6CD-EE84B47759FC</key>
-		<string>../../../DCBlurMenu/ILTranslucentView</string>
-		<key>277DD458-918D-461A-98E3-3253356580C4</key>
+		<key>EAE3E62F29FFB11C39602F0551980E472F2AA7E8</key>
+		<string>../../..DCBlurMenu/ILTranslucentView</string>
+		<key>EDD3A037022D95B20D25045D510BB3F397D00CA0</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/dchavezlive/DCBlurMenu.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>277DD458-918D-461A-98E3-3253356580C4</string>
+	<string>EDD3A037022D95B20D25045D510BB3F397D00CA0</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>277DD458-918D-461A-98E3-3253356580C4</string>
+			<string>EDD3A037022D95B20D25045D510BB3F397D00CA0</string>
 			<key>IDESourceControlWCCName</key>
 			<string>DCBlurMenu</string>
 		</dict>
@@ -44,7 +44,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>2212D901-06B9-425F-A6CD-EE84B47759FC</string>
+			<string>EAE3E62F29FFB11C39602F0551980E472F2AA7E8</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ILTranslucentView</string>
 		</dict>

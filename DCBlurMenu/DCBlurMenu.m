@@ -8,42 +8,38 @@
 
 #import "DCBlurMenu.h"
 
+@implementation DCMenuItem
+@end
+
+@interface DCBlurMenu()
+@property (strong, nonatomic) NSArray *menuItems;
+@property (strong, nonatomic) UINavigationController *masterNavigationController;
+@property (strong, nonatomic) UIView *masterView;
+@property (strong, nonatomic) NSLayoutConstraint *pullDownTopPositionConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *menuListTopPositionConstraint;
+@property (strong, nonatomic) NSString *currentItem;
+@property (assign, nonatomic) UIDeviceOrientation currentOrientation;
+@property (assign, nonatomic) BOOL scrolled;
+@property (assign, nonatomic) BOOL didChange;
+@property (assign, nonatomic) float tableHeight;
+@property (assign, nonatomic) float menuHeight;
+@end
+
 @implementation DCBlurMenu
-{
-    NSArray *menuItems;
-    
-    UINavigationController *masterNavigationController;
-    UIView *masterView;
-    
-    UIDeviceOrientation currentOrientation;
-    NSLayoutConstraint *pullDownTopPositionConstraint;
-    NSLayoutConstraint *menuListTopPositionConstraint;
-    
-    NSString *currentItem;
-    
-    BOOL scrolled;
-    float tableHeight;
-    float menuHeight;
-}
 
 - (id)init
 {
     self = [super init];
-    
-    menuItems = [NSMutableArray new];
-    
-    // setting defaults
-    _animationDuration = 0.4f;
-    _cellSelectedColor = [UIColor colorWithRed:137/255.f green:224/255.f blue:250/255.f alpha:.4];
+        
+    self.menuItems = [NSMutableArray new];
     
     // optional setup for ILTranslucentView
     self.translucentAlpha = 1;
     self.translucentStyle = UIBarStyleBlack;
     self.translucentTintColor = [UIColor clearColor];
     self.backgroundColor = [UIColor clearColor];
-
-    _cellHeight = 70.f;
-    scrolled = NO;
+    
+    self.scrolled = NO;
     
     return self;
 }
@@ -57,14 +53,14 @@
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
         
-        masterNavigationController = navigationController;
-        masterView = masterNavigationController.view;
+        self.masterNavigationController = navigationController;
+        self.masterView = self.masterNavigationController.view;
         
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragMenu:)];
         pan.minimumNumberOfTouches = 1;
         pan.maximumNumberOfTouches = 1;
         
-        [masterNavigationController.navigationBar addGestureRecognizer:pan];
+        [self.masterNavigationController.navigationBar addGestureRecognizer:pan];
         
         [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
         [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
@@ -77,27 +73,27 @@
 
 - (void)loadMenuWithButtons:(NSArray *)buttons
 {
-    tableHeight = [[UIScreen mainScreen] bounds].size.height;
+    self.tableHeight = [[UIScreen mainScreen] bounds].size.height;
     
-    [self setFrame:CGRectMake(0, 0, 0, tableHeight)];
+    [self setFrame:CGRectMake(0, 0, 0, self.tableHeight)];
     
-    _menuList = [[UITableView alloc] init];
-    [_menuList setBackgroundColor:[UIColor clearColor]];
-    [_menuList setScrollEnabled:NO];
-    [_menuList setRowHeight:_cellHeight];
-    [_menuList setDataSource:self];
-    [_menuList setDelegate:self];
-    [_menuList setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [self addSubview:_menuList];
+    self.menuList = [[UITableView alloc] init];
+    [self.menuList setBackgroundColor:[UIColor clearColor]];
+    [self.menuList setScrollEnabled:NO];
+    [self.menuList setRowHeight:self.cellHeight];
+    [self.menuList setDataSource:self];
+    [self.menuList setDelegate:self];
+    [self.menuList setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self addSubview:self.menuList];
     
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [_menuList setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.menuList setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    menuHeight = _menuList.bounds.size.height;
+    self.menuHeight = self.menuList.bounds.size.height;
     
     [self createConstraints];
     
-    menuItems = buttons;
+    self.menuItems = buttons;
 }
 
 #pragma mark - UITableView methods
@@ -109,7 +105,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [menuItems count];
+    return [self.menuItems count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -122,14 +118,16 @@
     cell.backgroundColor = [UIColor clearColor];
     
     UIView *cellSelectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
-    cellSelectedBackgroundView.backgroundColor = _cellSelectedColor;
+    cellSelectedBackgroundView.backgroundColor = self.cellSelectedColor;
     cell.selectedBackgroundView = cellSelectedBackgroundView;
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     [cell.textLabel setTextColor:[UIColor whiteColor]];
     [cell.textLabel setFont:[UIFont boldSystemFontOfSize:17]];
     [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
-    [cell.textLabel setText:[menuItems objectAtIndex:indexPath.item]];
+    
+    DCMenuItem *item = [self.menuItems objectAtIndex:indexPath.row];
+    [cell.textLabel setText:item.title];
     
     return cell;
 }
@@ -140,46 +138,51 @@
 {
     if ([sender state] == UIGestureRecognizerStateBegan)
     {
-        currentItem = masterNavigationController.navigationBar.topItem.title;
-        if (!scrolled)
-            [masterNavigationController.navigationBar.topItem setTitle:@"Pull Down"];
+        self.currentItem = self.masterNavigationController.navigationBar.topItem.title;
+        if (!self.scrolled)
+            [self.masterNavigationController.navigationBar.topItem setTitle:@"Pull Down"];
     }
     else if ([sender state] == UIGestureRecognizerStateChanged)
     {        
-        CGPoint gesturePosition = [sender translationInView:masterNavigationController.navigationBar];
+        CGPoint gesturePosition = [sender translationInView:self.masterNavigationController.navigationBar];
         CGPoint newPosition = gesturePosition;
         
         newPosition.x = self.frame.size.width / 2;
         newPosition.y += -((self.frame.size.height / 2) - [self topMargin]);
         
-        if (!scrolled)
+        if (!self.scrolled)
         {
             if (newPosition.y > -160.f)
             {
                 [self showMenu];
-                scrolled = YES;
+                self.scrolled = YES;
             }
             else if (newPosition.y > -210.f)
                 [self setCenter:newPosition];
         }
         else
         {
-            CGPoint point = [sender locationInView:_menuList];
-            NSIndexPath *indexPath = [_menuList indexPathForRowAtPoint:point];
+            CGPoint point = [sender locationInView:self.menuList];
+            NSIndexPath *indexPath = [self.menuList indexPathForRowAtPoint:point];
             
-            [_menuList selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [self.menuList selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         }
     }
     else if ([sender state] == UIGestureRecognizerStateEnded)
     {
-        if (!scrolled)
-            [masterNavigationController.navigationBar.topItem setTitle:currentItem];
+        if (!self.scrolled)
+            [self.masterNavigationController.navigationBar.topItem setTitle:self.currentItem];
         else
         {
-            CGPoint point = [sender locationInView:_menuList];
-            NSIndexPath *indexPath = [_menuList indexPathForRowAtPoint:point];
-            currentItem = menuItems[[indexPath item]];
-            [self.delegate menuItemSelected:indexPath];
+            CGPoint point = [sender locationInView:self.menuList];
+            NSIndexPath *indexPath = [self.menuList indexPathForRowAtPoint:point];
+            DCMenuItem *item = self.menuItems[indexPath.row];
+            
+            if ([self.currentItem isEqualToString:item.title])
+                self.didChange = false;
+            
+            self.currentItem = item.title;
+            [self.delegate menuItemSelected:indexPath.row];
         }
     }
 }
@@ -188,35 +191,40 @@
 
 - (void)hideMenu
 {
-    [UIView animateWithDuration: _animationDuration
+    [UIView animateWithDuration: self.animationDuration
                           delay: 0.0
                         options: UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         [_menuList deselectRowAtIndexPath:[_menuList indexPathForSelectedRow] animated:YES];
-                         self.center = CGPointMake(self.frame.size.width / 2, -(self.frame.size.height / 2));
-                         _isShowing = NO;
-                         scrolled = NO;
+                         [self.menuList deselectRowAtIndexPath:[self.menuList indexPathForSelectedRow] animated:YES];
+                         
+                         if (self.didChange)
+                             self.center = CGPointMake(self.frame.size.width / 2, -(self.frame.size.height / 2));
+                         else
+                             self.center = CGPointMake(self.frame.size.width /2, -((self.frame.size.height / 3) + (self.frame.size.height / 20)));
+                         
+                         self.isShowing = NO;
+                         self.scrolled = NO;
                      }
                      completion:^(BOOL finished){
-                         [_delegate menuIsAnimating];
-                         [masterNavigationController.navigationBar.topItem setTitle:currentItem];
+                         [self.delegate menuIsAnimating];
+                         [self.masterNavigationController.navigationBar.topItem setTitle:self.currentItem];
                      }];
 }
 
 - (void)showMenu
 {
-    [masterNavigationController.navigationBar.topItem setTitle:@""];
-    [UIView animateWithDuration: _animationDuration
+    [self.masterNavigationController.navigationBar.topItem setTitle:@""];
+    [UIView animateWithDuration: self.animationDuration
                           delay: 0.0
                         options: UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          self.center = CGPointMake(self.frame.size.width / 2, (self.frame.size.height / 2));
-                         _isShowing = YES;
+                         self.isShowing = YES;
                      }
                      completion:^(BOOL finished){
-                         [_delegate menuIsAnimating];
+                         [self.delegate menuIsAnimating];
                          NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection: 0];
-                         [_menuList selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                         [self.menuList selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
                      }];
 }
 
@@ -224,11 +232,11 @@
 
 - (void)createConstraints
 {
-    pullDownTopPositionConstraint = [NSLayoutConstraint
+    self.pullDownTopPositionConstraint = [NSLayoutConstraint
                                      constraintWithItem:self
                                      attribute:NSLayoutAttributeTop
                                      relatedBy:NSLayoutRelationEqual
-                                     toItem:masterView
+                                     toItem:self.masterView
                                      attribute:NSLayoutAttributeTop
                                      multiplier:1.0
                                      constant:-self.frame.size.height + [self topMargin]];
@@ -237,7 +245,7 @@
                                                              constraintWithItem:self
                                                              attribute:NSLayoutAttributeCenterX
                                                              relatedBy:NSLayoutRelationEqual
-                                                             toItem:masterView
+                                                             toItem:self.masterView
                                                              attribute:NSLayoutAttributeCenterX
                                                              multiplier:1.0
                                                              constant:0];
@@ -246,7 +254,7 @@
                                                    constraintWithItem:self
                                                    attribute:NSLayoutAttributeWidth
                                                    relatedBy:NSLayoutRelationEqual
-                                                   toItem:masterView
+                                                   toItem:self.masterView
                                                    attribute:NSLayoutAttributeWidth
                                                    multiplier:1.0
                                                    constant:0];
@@ -255,7 +263,7 @@
                                                        constraintWithItem:self
                                                        attribute:NSLayoutAttributeHeight
                                                        relatedBy:NSLayoutRelationLessThanOrEqual
-                                                       toItem:masterView
+                                                       toItem:self.masterView
                                                        attribute:NSLayoutAttributeHeight
                                                        multiplier:1.0
                                                        constant:0];
@@ -269,22 +277,22 @@
                                                     toItem:nil
                                                     attribute:NSLayoutAttributeNotAnAttribute
                                                     multiplier:1.0
-                                                    constant:tableHeight];
+                                                    constant:self.tableHeight];
     
     pullDownHeightConstraint.priority = 900;
     
     
     NSLayoutConstraint *menuListHeightMaxConstraint = [NSLayoutConstraint
-                                                       constraintWithItem:_menuList
+                                                       constraintWithItem:self.menuList
                                                        attribute:NSLayoutAttributeHeight
                                                        relatedBy:NSLayoutRelationLessThanOrEqual
-                                                       toItem:masterView
+                                                       toItem:self.masterView
                                                        attribute:NSLayoutAttributeHeight
                                                        multiplier:1.0
                                                        constant:0];
     
     NSLayoutConstraint *menuListHeightConstraint = [NSLayoutConstraint
-                                                    constraintWithItem:_menuList
+                                                    constraintWithItem:self.menuList
                                                     attribute:NSLayoutAttributeHeight
                                                     relatedBy:NSLayoutRelationEqual
                                                     toItem:self
@@ -293,7 +301,7 @@
                                                     constant:0];
     
     NSLayoutConstraint *menuListWidthConstraint = [NSLayoutConstraint
-                                                   constraintWithItem:_menuList
+                                                   constraintWithItem:self.menuList
                                                    attribute:NSLayoutAttributeWidth
                                                    relatedBy:NSLayoutRelationEqual
                                                    toItem:self
@@ -302,7 +310,7 @@
                                                    constant:0];
     
     NSLayoutConstraint *menuListCenterXPositionConstraint = [NSLayoutConstraint
-                                                             constraintWithItem:_menuList
+                                                             constraintWithItem:self.menuList
                                                              attribute:NSLayoutAttributeCenterX
                                                              relatedBy:NSLayoutRelationEqual
                                                              toItem:self
@@ -310,26 +318,26 @@
                                                              multiplier:1.0
                                                              constant:0];
     
-    menuListTopPositionConstraint = [NSLayoutConstraint
-                                     constraintWithItem:_menuList
+    self.menuListTopPositionConstraint = [NSLayoutConstraint
+                                     constraintWithItem:self.menuList
                                      attribute:NSLayoutAttributeTop
                                      relatedBy:NSLayoutRelationEqual
                                      toItem:self
                                      attribute:NSLayoutAttributeTop
                                      multiplier:1.0
-                                     constant:-(_menuList.bounds.size.height - 280)/2];
+                                     constant:-(self.menuList.bounds.size.height - 280)/2];
     
-    [masterView addConstraint: pullDownTopPositionConstraint];
-    [masterView addConstraint: pullDownCenterXPositionConstraint];
-    [masterView addConstraint: pullDownWidthConstraint];
-    [masterView addConstraint: pullDownHeightConstraint];
-    [masterView addConstraint: pullDownHeightMaxConstraint];
+    [self.masterView addConstraint: self.pullDownTopPositionConstraint];
+    [self.masterView addConstraint: pullDownCenterXPositionConstraint];
+    [self.masterView addConstraint: pullDownWidthConstraint];
+    [self.masterView addConstraint: pullDownHeightConstraint];
+    [self.masterView addConstraint: pullDownHeightMaxConstraint];
     
-    [masterView addConstraint: menuListHeightMaxConstraint];
-    [masterView addConstraint: menuListHeightConstraint];
-    [masterView addConstraint: menuListWidthConstraint];
-    [masterView addConstraint: menuListCenterXPositionConstraint];
-    [masterView addConstraint: menuListTopPositionConstraint];
+    [self.masterView addConstraint: menuListHeightMaxConstraint];
+    [self.masterView addConstraint: menuListHeightConstraint];
+    [self.masterView addConstraint: menuListWidthConstraint];
+    [self.masterView addConstraint: menuListCenterXPositionConstraint];
+    [self.masterView addConstraint: self.menuListTopPositionConstraint];
     
 }
 
@@ -337,11 +345,11 @@
 {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     
-    if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown || currentOrientation == orientation) {
+    if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown || self.currentOrientation == orientation) {
         return;
     }
     
-    currentOrientation = orientation;
+    self.currentOrientation = orientation;
     
     [self performSelector:@selector(orientationChanged) withObject:nil afterDelay:0];
 }
@@ -349,19 +357,19 @@
 - (void)orientationChanged
 {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    if ((UIDeviceOrientationIsPortrait(currentOrientation) && UIDeviceOrientationIsPortrait(orientation)) ||
-        (UIDeviceOrientationIsLandscape(currentOrientation) && UIDeviceOrientationIsLandscape(orientation)))
+    if ((UIDeviceOrientationIsPortrait(self.currentOrientation) && UIDeviceOrientationIsPortrait(orientation)) ||
+        (UIDeviceOrientationIsLandscape(self.currentOrientation) && UIDeviceOrientationIsLandscape(orientation)))
     {
-        currentOrientation = orientation;
+        self.currentOrientation = orientation;
         
-        pullDownTopPositionConstraint.constant = -self.frame.size.height + [self topMargin];
+        self.pullDownTopPositionConstraint.constant = -self.frame.size.height + [self topMargin];
         
         if (UIDeviceOrientationIsPortrait(orientation))
-            menuListTopPositionConstraint.constant = -(menuHeight - 280) / 2;
+            self.menuListTopPositionConstraint.constant = -(self.menuHeight - 280) / 2;
         else
-            menuListTopPositionConstraint.constant = -(menuHeight - 33) / 2;
+            self.menuListTopPositionConstraint.constant = -(self.menuHeight - 33) / 2;
         
-        if (_isShowing)
+        if (self.isShowing)
             [self hideMenu];
         
         return;
@@ -377,20 +385,16 @@
     if (UIInterfaceOrientationIsLandscape(self.window.rootViewController.interfaceOrientation))
     {
         if (isStatusBarShowing)
-        {
-            return [UIApplication.sharedApplication statusBarFrame].size.width + masterNavigationController.navigationBar.frame.size.height;
-        }
+            return [UIApplication.sharedApplication statusBarFrame].size.width + self.masterNavigationController.navigationBar.frame.size.height;
         else
-            return masterNavigationController.navigationBar.frame.size.height;
+            return self.masterNavigationController.navigationBar.frame.size.height;
     }
     else
     {
         if (isStatusBarShowing)
-        {
-            return [UIApplication.sharedApplication statusBarFrame].size.height + masterNavigationController.navigationBar.frame.size.height;
-        }
+            return [UIApplication.sharedApplication statusBarFrame].size.height + self.masterNavigationController.navigationBar.frame.size.height;
         else
-            return masterNavigationController.navigationBar.frame.size.height;
+            return self.masterNavigationController.navigationBar.frame.size.height;
     }
 }
 
