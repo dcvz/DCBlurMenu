@@ -32,7 +32,9 @@ As of now DCBlurMenu relies on the use of Storyboards. The setup should include 
 -(void)menuIsAnimating;
 ```
 
-##### Example
+*Make sure to also set your statusbar to light content!*
+
+#### Example
 
 ```objective-c
 - (void)createMenu
