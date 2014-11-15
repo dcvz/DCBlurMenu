@@ -85,7 +85,7 @@
     DCMenuItem *startItem = self.menuItems[self.startIndex];
     
     // do this to remove the back attribute
-    UIViewController *firstView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil]instantiateViewControllerWithIdentifier:startItem.storyboardID];
+    UIViewController *firstView = [self.storyboard instantiateViewControllerWithIdentifier:startItem.storyboardID];
     [self setRootViewController:firstView];
     
     self.blurMenu = [[DCBlurMenu alloc] initWithNavigationController:self];
@@ -118,7 +118,7 @@
         DCMenuItem *selectedItem = self.menuItems[index];
         
     	// will change view to view with identifier equal to selected item title
-        UIViewController *selectedView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil]instantiateViewControllerWithIdentifier:selectedItem.storyboardID];
+        UIViewController *selectedView = [self.storyboard instantiateViewControllerWithIdentifier:selectedItem.storyboardID];
         [self setRootViewController:selectedView];
     }
     
