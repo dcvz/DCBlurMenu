@@ -64,6 +64,8 @@
         
         [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
         [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+        
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     
     return self;
